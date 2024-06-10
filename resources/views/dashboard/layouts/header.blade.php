@@ -29,7 +29,7 @@
             <div class="dropdown text-end">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
-                    <p class="d-inline" style="font-weight: 700"> Haloo, Nuza Nadenta
+                    <p class="d-inline" style="font-weight: 700"> Haloo, {{ Auth::user()->name }}
                     </p>
                     <img src="https://github.com/mdo.png" width="32" height="32" class="rounded-circle mx-1"
                         style="border: 1px solid #444">

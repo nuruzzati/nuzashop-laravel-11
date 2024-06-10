@@ -15,7 +15,14 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $category = Category::all();
+        $category = Category::latest();
+
+        if(request('search')) {
+            $category->where('name', 'like', '%' . request('search') . '%');
+        }
+        $category = $category->get();
+
+
         return view('dashboard.category.index', [
             'categories' => $category
         ]);
@@ -60,7 +67,9 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        return view('dashboard.category.show', [
+            'category' => $category
+        ]);
     }
 
     /**
@@ -119,4 +128,31 @@ class CategoryController extends Controller
         return redirect('/dashboard/category')->with('success', 'category successfully deleted!');
         
     }
+
+
+
+    public function copy($id)
+{
+    $category = Category::findOrFail($id);
+
+    $newCategory = $category->replicate();
+    $newCategory->name = $category->name . ' (Copy)';
+    $newCategory->save();
+
+    return redirect('/dashboard/category')->with('success', 'Category copied successfully!');
+}
+
+
+public function bulkDelete(Request $request)
+{
+    $ids = $request->input('selected');
+    if ($ids) {
+        Category::whereIn('id', $ids)->delete();
+        return redirect('/dashboard/category')->with('success', count($ids) . ' categories deleted successfully!');
+    }
+    return redirect('/dashboard/category')->with('error', 'No categories selected for deletion.');
+}
+
+
+
 }

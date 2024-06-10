@@ -56,7 +56,7 @@
 
         <div class="header-icons">
             <div class="bx bx-menu" id="menu-icon"></div>
-            <a style="position: absolute;right: 0; margin-right: 120px;" href="keranjang.php"><i
+            <a style="position: absolute;right: 0; margin-right: 120px;" href="/cart"><i
                     class='bx bx-shopping-bag'></i></a>
         </div>
 
@@ -71,7 +71,9 @@
                     <hr class="dropdown-divider"> <!-- Garis pemisah -->
                     <a class="dropdown-item" href="/register"><i class="bx bx-user-plus"></i> Register</a>
                 @else
-                    <a class="dropdown-item" href="/dashboard"><i class="bx bx-grid-alt"></i> Dashboard</a>
+                    @can('admin')
+                        <a class="dropdown-item" href="/dashboard"><i class="bx bx-grid-alt"></i> Dashboard</a>
+                    @endcan
                     <hr class="dropdown-divider"> <!-- Garis pemisah -->
 
                     <form action="/logout" method="post">
@@ -89,6 +91,11 @@
 
 
     </header>
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 
     <!-- home -->
     <section class="home" id="home">
@@ -101,7 +108,7 @@
     </section>
 
     <!-- featured -->
-    <section class="featured" id="featured">
+    <section class="featured" id="f-categories">
         <div class="center-text">
             <h2>Featured <span>Categories</span></h2>
         </div>
@@ -153,48 +160,46 @@
             </div>
 
             <div class="new-content">
-                @php
-                    $p = 1;
-                @endphp
-                @while ($p <= 5)
+                @foreach ($latestProducts as $lp)
                     <div class="box">
-                        <img width="90%" src="img/model1.jpg" alt="">
-                        <h5>lorem ipsum dizgi</h5>
-                        <h6>Rp399.000.00</h6>
+                        <img width="90%" src="{{ asset('storage/' . $lp->image) }}" alt="">
+                        <h5>{{ Illuminate\Support\Str::limit($lp->name, 20, '...') }}</h5>
+                        <!-- Menampilkan maksimal 20 karakter -->
+                        <h6>{{ 'Rp ' . number_format($lp->price, 0, ',', '.') }}</h6>
                         <div class="sale">
                             <h4>New</h4>
                         </div>
                     </div>
-                    @php $p++ @endphp
-                @endwhile
-
+                @endforeach
             </div>
+
+
         </div>
     </section>
 
     <!-- all product -->
     <!-- all product -->
-    <section class="new" id="all">
+    <section class="new" id="f-products">
         <div class="new">
             <div class="center-text">
                 <h2>Featured <span>Product</span></h2>
             </div>
 
             <div class="new-content">
-                @php
-                    $q = 1;
-                @endphp
-                @while ($q <= 10)
+
+                @foreach ($product as $p)
                     <div class="box">
-                        <a href=""> <img height="200px" width="100%" src="img/e.jpg"></a>
-                        <h5>nama produk</h5>
-                        <h6>Rpharga</h6>
+                        <a href="/product/detail/{{ $p->id }}"> <img height="200px" width="100%"
+                                src="{{ asset('storage/' . $p->image) }}"></a>
+                        <h5>{{ Illuminate\Support\Str::limit($p->name, 20, '...') }}</h5>
+                        <h6>{{ 'Rp ' . number_format($p->price, 0, ',', '.') }}</h6>
+
                         <div class="sale">
                             <h4>Sale</h4>
                         </div>
                     </div>
-                    @php $q++ @endphp
-                @endwhile
+                @endforeach
+
 
             </div>
         </div>

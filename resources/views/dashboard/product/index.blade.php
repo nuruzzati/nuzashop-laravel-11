@@ -12,10 +12,16 @@
         <div class="d-flex gap-3 align-items-center mb-3">
             <a href="/dashboard/product/create" class="btn btn-primary d-flex align-items-center gap-1"
                 style="font-weight: 500;"><i class='bx bx-plus-circle'></i><span> Create product</span></a>
-            <div class="input-group" style="max-width: 300px;">
-                <input type="text" class="form-control" placeholder="Search product...">
-                <button class="btn btn-outline-secondary" type="button"><i class='bx bx-search'></i></button>
-            </div>
+
+
+            <form action="/dashboard/product">
+                <div class="input-group" style="max-width: 300px;">
+                    <input name="search" value="{{ request('search') }}" type="text" class="form-control"
+                        placeholder="Search product...">
+                    <button class="btn btn-outline-secondary" type="button"><i class='bx bx-search'></i></button>
+                </div>
+            </form>
+
             <div class="dropdown">
                 <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton"
                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -28,7 +34,7 @@
                     <li><a class="dropdown-item" href="#">Terlama</a></li>
                 </ul>
             </div>
-            <button class="btn btn-secondary" onclick="window.print()"><i class='bx bx-printer'></i> Print</button>
+            <a href="/dashboard/pdfproduct" class="btn btn-secondary"><i class='bx bx-printer'></i> Print</a>
         </div>
 
 
@@ -75,7 +81,15 @@
                                     <i class='bx bx-trash-alt'></i>
                                 </button>
                             </form>
-                            <a class="badge bg-success my-1" href=""><i class='bx bx-zoom-in'></i></a>
+                            <form action="/dashboard/product/{{ $product->id }}/copy" method="post" class="d-inline">
+                                @csrf
+                                <button type="submit" class="badge bg-secondary border-0"
+                                    onclick="return confirm('Are you sure you want to copy this product?')">
+                                    <i class='bx bx-copy'></i>
+                                </button>
+                            </form>
+                            <a class="badge bg-success my-1" href="/dashboard/product/{{ $product->id }}"><i
+                                    class='bx bx-zoom-in'></i></a>
                         </div>
                     </div>
                 </div>

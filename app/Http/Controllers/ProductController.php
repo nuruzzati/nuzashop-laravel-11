@@ -16,7 +16,16 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $product = Product::all();
+        $product = Product::latest();
+
+        if(request('search')) {
+            $product->where('name', 'like', '%' . request('search') . '%')->orWhere;
+        }
+
+        $product = $product->get();
+
+
+
         return view('dashboard.product.index', [
             'products' => $product
         ]);
@@ -43,7 +52,7 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'weight' => 'required|numeric|min:0',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required|image',
             'description' => 'required|string',
             'stock' => 'required|integer|min:0'
         ]);
@@ -66,7 +75,9 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        return view('dashboard.product.show', [
+            'product' => $product
+        ]);
     }
 
     /**
@@ -91,7 +102,7 @@ class ProductController extends Controller
         'name' => 'required|string|max:255',
         'price' => 'required|numeric|min:0',
         'weight' => 'required|numeric|min:0',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'image' => 'nullable|image',
         'description' => 'required|string',
         'stock' => 'required|integer|min:0'
     ]);
@@ -126,4 +137,17 @@ class ProductController extends Controller
 
         return redirect('/dashboard/product')->with('success', 'product successfully deleted!');
     }
+
+
+
+        public function copy($id)
+{
+    $product = Product::findOrFail($id);
+
+    $newproduct = $product->replicate();
+    $newproduct->name = $product->name . ' (Copy)';
+    $newproduct->save();
+
+    return redirect('/dashboard/product')->with('success', 'Product copied successfully!');
+}
 }

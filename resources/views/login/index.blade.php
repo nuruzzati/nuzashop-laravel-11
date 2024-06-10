@@ -48,6 +48,8 @@
                     <button class="w-100 btn btn-lg text-light" style="font-weight: 700;background-color: #353534"
                         type="submit">Login</button>
                 </form>
+                <p class="mt-3" style="font-size: 12px">don't have an account yet?<a class="text-decoration-none"
+                        href="/register"> sign up now!</a></p>
             </main>
         </div>
     </div>
